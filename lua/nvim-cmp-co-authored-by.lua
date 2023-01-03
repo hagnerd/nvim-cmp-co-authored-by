@@ -21,7 +21,6 @@ function source:get_debug_name()
 end
 
 function source:_validate_options(params)
-  PRINT({params = params})
   vim.validate({
     handles = {params.handles, "table"}
   })
@@ -29,19 +28,12 @@ function source:_validate_options(params)
 end
 
 function source:complete(request, callback)
-  PRINT({request = request})
   local options = self:_validate_options(request.option)
 
   local input = string.sub(request.context.cursor_before_line, request.offset - 1)
   local prefix = string.sub(request.context.cursor_before_line, 1, request.offset - 1)
 
   local handles = options.handles or {}
-
-  PRINT({
-    input_length = #input,
-    request_context_cursor_row = request.context.cursor.row,
-    request_context_cursor_col = request.context.cursor.col,
-  })
 
   if vim.startswith(input, '@') and (prefix == '@' or vim.endswith(prefix, ' @')) then
     local items = {}
